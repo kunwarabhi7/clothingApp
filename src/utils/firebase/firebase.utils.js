@@ -62,6 +62,19 @@ export const addCollectionAndDocuments = async (
     console.log('done');
 };
 
+export const getCategoriesAndDocuments = async () => {
+    const collectionRef = collection(db, 'categories');
+    const q = query(collectionRef);
+
+    const quarySnapShot = await getDocs(q);
+    const categoryMap = quarySnapShot.docs.reduce((acc, docSnapShot) => {
+        const { title, items } = docSnapShot.data();
+        acc[title.toLowerCase()] = items;
+        return acc;
+    }, {});
+    return categoryMap;
+}
+
 export const createUserDocumentFromAuth = async (
     userAuth,
     additionalInformation = {}
